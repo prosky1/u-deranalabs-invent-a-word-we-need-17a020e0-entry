@@ -1,16 +1,16 @@
 // Invent a Word We Need — entry program (program/v1).
 // Writes the coined word and its one-line definition to /output/entry.txt.
 //
-// The entry text is fixed: a single invented English word, "Tabnesia",
-// defined in one clear line of 77 characters (limit 140).
+// The entry text is fixed: a single invented English word, "Muteblind",
+// defined in one clear line of 75 characters (limit 140).
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 // The entry, verbatim. Do not edit this string: it is the judged text.
-const COINED_WORD = "Tabnesia";
+const COINED_WORD = "Muteblind";
 const ENTRY_TEXT =
-  "Tabnesia (n.) — opening a new tab and instantly forgetting why you opened it.";
+  "Muteblind (n.) — delivering a full speech before noticing you were on mute.";
 
 // The sealed scorer accepts UTF-8 text of 1 to 140 characters.
 const MAX_CHARS = 140;
@@ -37,6 +37,15 @@ function validateEntry(text: string): void {
   // text can never silently submit a definition without its word.
   if (!text.startsWith(COINED_WORD)) {
     throw new Error(`entry text must start with the coined word ${COINED_WORD}`);
+  }
+  // A well-formed entry separates the word from its definition with an
+  // em dash and ends the definition with a period; anything else means
+  // the string was edited by mistake.
+  if (!text.includes(" — ")) {
+    throw new Error("entry text must separate the word and definition with an em dash");
+  }
+  if (!text.endsWith(".")) {
+    throw new Error("entry text must end with a period");
   }
 }
 
